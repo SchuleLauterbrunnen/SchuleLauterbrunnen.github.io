@@ -61,11 +61,8 @@ function submitAnswer() {
     totalQuestions++;
     setTimeout(() => {
         document.getElementById('result').classList.add('hidden');
-        if (totalQuestions < 10) { // example condition, you can set your own limit
-            nextQuestion();
-        } else {
-            endGame();
-        }
+        nextQuestion();
+
     }, 1000);
 }
 
