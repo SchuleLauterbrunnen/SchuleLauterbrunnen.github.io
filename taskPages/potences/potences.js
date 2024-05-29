@@ -2,6 +2,7 @@ let correctAnswers = 0;
 let incorrectAnswers = 0;
 let totalQuestions = 0;
 let timerInterval;
+let chartInstance = null;
 
 document.getElementById('startButton').addEventListener('click', startGame);
 document.getElementById('submitButton').addEventListener('click', submitAnswer);
@@ -17,7 +18,6 @@ function startGame() {
     totalQuestions = 0;
     document.getElementById('result').classList.add('hidden');
     document.getElementById('resultChart').classList.add('hidden');
-    
     document.getElementById('startButton').classList.add('hidden');
     document.getElementById('game').classList.remove('hidden');
     document.getElementById('answerInput').value = '';
@@ -41,7 +41,7 @@ function startTimer() {
 
 function nextQuestion() {
     const number = Math.floor(Math.random() * 20) + 1;
-    document.getElementById('task').textContent = `Quadrat von ${number}`;
+    document.getElementById('task').textContent = `Square of ${number}`;
     document.getElementById('task').dataset.answer = number * number;
     document.getElementById('answerInput').value = '';
     document.getElementById('answerInput').focus();
@@ -77,10 +77,16 @@ function endGame() {
 
 function displayResults() {
     const ctx = document.getElementById('resultChart').getContext('2d');
-    new Chart(ctx, {
+    
+    // Destroy the previous chart instance if it exists
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+
+    chartInstance = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Korrekt', 'Falsch'],
+            labels: ['Correct', 'Incorrect'],
             datasets: [{
                 label: 'Answers',
                 data: [correctAnswers, incorrectAnswers],
