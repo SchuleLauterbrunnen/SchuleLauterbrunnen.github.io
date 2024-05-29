@@ -13,9 +13,14 @@ document.getElementById('answerInput').addEventListener('keypress', function (e)
 });
 
 function startGame() {
+    // Destroy the previous chart instance if it exists
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
     correctAnswers = 0;
     incorrectAnswers = 0;
     totalQuestions = 0;
+    document.getElementById('taskTitle').classList.add('hidden');
     document.getElementById('result').classList.add('hidden');
     document.getElementById('resultChart').classList.add('hidden');
     document.getElementById('startButton').classList.add('hidden');
@@ -41,7 +46,7 @@ function startTimer() {
 
 function nextQuestion() {
     const number = Math.floor(Math.random() * 20) + 1;
-    document.getElementById('task').textContent = `Square of ${number}`;
+    document.getElementById('task').textContent = `Quadrat von ${number}`;
     document.getElementById('task').dataset.answer = number * number;
     document.getElementById('answerInput').value = '';
     document.getElementById('answerInput').focus();
@@ -53,17 +58,23 @@ function submitAnswer() {
     if (userAnswer === correctAnswer) {
         correctAnswers++;
         document.getElementById('resultImage').src = 'tick.png';
+        document.getElementById('resultText').innerText = "            Richtig!";
+        document.getElementById('resultText').style.color = "green";
     } else {
         incorrectAnswers++;
         document.getElementById('resultImage').src = 'cross.png';
+        document.getElementById('resultText').innerText = "            Falsch!";
+        document.getElementById('resultText').style.color = "red";
     }
+    document.getElementById('game').classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
     totalQuestions++;
     setTimeout(() => {
         document.getElementById('result').classList.add('hidden');
+        document.getElementById('game').classList.remove('hidden');
         nextQuestion();
 
-    }, 1000);
+    }, 500);
 }
 
 function endGame() {
@@ -75,17 +86,13 @@ function endGame() {
 function displayResults() {
     const ctx = document.getElementById('resultChart').getContext('2d');
     
-    // Destroy the previous chart instance if it exists
-    if (chartInstance) {
-        chartInstance.destroy();
-    }
+
 
     chartInstance = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Correct', 'Incorrect'],
+            labels: ['Richtig', 'Falsch'],
             datasets: [{
-                label: 'Answers',
                 data: [correctAnswers, incorrectAnswers],
                 backgroundColor: ['#4caf50', '#f44336']
             }]
