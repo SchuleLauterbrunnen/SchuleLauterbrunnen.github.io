@@ -1,0 +1,52 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+    position: relative;
+}
+
+#timerContainer {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    font-size: 2em;
+    color: #333;
+}
+
+.hidden {
+    display: none;
+}
+
+#task {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+#answerInput {
+    font-size: 1em;
+    padding: 5px;
+}
+
+#submitButton {
+    font-size: 1em;
+    padding: 5px 10px;
+    margin-top: 10px;
+}
+
+#resultImage {
+    width: 50px;
+    height: 50px;
+}
+
+#resultChart {
+    margin-top: 20px;
+    max-width: 600px;
+}

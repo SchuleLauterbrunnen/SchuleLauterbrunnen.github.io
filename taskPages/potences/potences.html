@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Squares Learning Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Squares Learning Game</h1>
+        <button id="startButton">START</button>
+        <div id="game" class="hidden">
+            <div id="timerContainer">
+                <div id="timer"></div>
+            </div>
+            <div id="task"></div>
+            <input type="number" id="answerInput" placeholder="Enter your answer">
+            <button id="submitButton">OK</button>
+            <div id="result" class="hidden">
+                <img id="resultImage" src="" alt="Result">
+            </div>
+        </div>
+        <canvas id="resultChart" class="hidden"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="potences.js"></script>
+</body>
+</html>
