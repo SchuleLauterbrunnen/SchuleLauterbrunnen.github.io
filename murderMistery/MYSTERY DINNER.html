@@ -1,0 +1,185 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Murder Mystery Dinner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Creepster', Arial, sans-serif;
+            background-color: black;
+            color: #f0f0f0;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        #login, #clue {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #333;
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        body {
+        font-family: 'Creepster', Arial, sans-serif;
+        background-image: url('murderer.jpg');
+        background-size: cover; /* Ensures the image covers the whole screen */
+        background-repeat: no-repeat; /* Prevents the image from repeating */
+        background-position: center; /* Centers the image on the screen */
+        color: #f0f0f0;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        }
+</style>
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Halloween Crime Mystery</h1>
+    <div id="login">
+        <p>Enter your name:</p>
+        <input type="text" id="name" placeholder="YOUR NAME" oninput="this.value = this.value.toUpperCase()">
+        <button onclick="login()">Log In</button>
+    </div>
+
+    <div id="clue" style="display: none;">
+        <p id="userInformation"></p>
+        <p id="userQuestion"></p>
+        <p id="userHint"></p>
+        <p>Enter the name of the murderer:</p>
+        <input type="text" id="code" placeholder="ENTER CODE" oninput="this.value = this.value.toUpperCase()">
+        <button onclick="getClue()" id="clueButton">Get Clue</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+
+        const   characters_info = {
+            "ROBIN": {
+                "information": "Eva was on the phone seconds before she was killed",
+                "question": "When did you last hear from Eva?",
+                "clue": "you know",
+                "hint": ""
+            },
+            "PHILIP": {
+                "information": "Someone arrived early to the party and came with decoration for the party that looked odd.",
+                "question": "Where did you get the decoration from?",
+                "clue" : "The murderer is female.",
+                "hint": "Find out if somebody knows something about Eva's costume."
+            },
+            "MATIAS": {
+                "information": "I came late to the party because Tora was asking me to get something from her parents.",
+                "question": "Why did you and Tora not come at the same time?",
+                "clue" : "You know the murderer well.",
+                "hint": "Find out more about the decoration in the house"
+            },
+            "MAX": {
+                "information": "I saw a suspicious shadow near the costume room, short and quick.",
+                "question": "Did you see anything odd about Eva's appearance",
+                "clue": "The murderer is dressed as a Disney character",
+                "hint": "Ask people if somebody was acting strange upon arrival"
+            },
+            "ANDERS": {
+                "information": "Maiara was nervous upon arrival and Tora seemed stressed.",
+                "question": "Did you see anyone behaving anxiously?",
+                "clue": "Mattias knows the murderer well.",
+                "hint": "Ask if people have noticed something strange about Eva's video"
+            },
+            "CESC": {
+                "information": "I overheard Eva talking with another woman about the party and they were fighting about the costume",
+                "question": "Do you remember something specific about Eva's costue?",
+                "clue" : "You are not studying on the same floor as the murderer",
+                "hint": "Find out who last talked to Eva"
+            },
+            "TORA": {
+                "information": "You are the murderer!",
+                "question": "Lie and Mislead!",
+                "clue" : "be careful about who you are telling lies",
+                "hint": "If somebody asks you about decoration. Tell them you had it from your parents."
+            },
+            "ROBBIE": {
+                "information": "I've talked to Eva seconds before the murderer and heard a high pitched voice entering the room",
+                "question": "When did you last have contact with Eva",
+                "clue" : "The murderer is about the same height as you",
+                "hint": "Ask if people acted strange upon arrival."
+            },
+            "SVENJA": {
+                "information": "I saw someone short slip away from the setup area quickly, looking back.",
+                "question": "Did you notice anyone behaving strangely?",
+                "clue" : "the murderer is dressed like a Disney character",
+                "hint": "Find out more about the decoration"
+            },
+            "AMANDA": {
+                "information": "I've seen the same decoration at Eva's house on a previous party",
+                "question": "Did you see something suscpicious about the decoration?",
+                "clue" : "The murderer was not in Erken with you",
+                "hint": "Ask the hosts where the decoration was from?"
+            },
+            "MELODIE": {
+                "information": "I saw someone carrying an object they tried to hide, and they looked nervous.",
+                "question": "Did you notice anyone carrying something odd?",
+                "clue" : "The murderer is about the same height as you.",
+                "hint": "Find out if people were behaving strangely"
+            },
+            "TREVOR": {
+                "information": "One of the girls was not as in shock as they should have after the Eva's murder",
+                "question": "Did you hear anyone mention Eva?",
+                "clue" : "The murderer is dressed as a Disney character",
+                "hint": "Find out if somebody overheard anyone talking about Eva."
+            },
+            "CHARLIE": {
+                "information": "I heard a female voice murmuring something like ‘It’ll be perfect tonight,’ which sounded odd.",
+                "question": "Did you hear anyone say anything strange?",
+                "clue" : "The murderer does not study on the same floor as you",
+                "hint": "Don't trust what the murderer is telling you. They should only lie"
+            },
+            "LILIAN": {
+                "information": "I noticed a short figure near the costume room, disappearing quickly after.",
+                "question": "Did you see anyone near the costume room?",
+                "clue" : "The murderer is female.",
+                "hint": "Find out more about the decoration."
+            },
+            "MAIARA": {
+                "information": "Another woman seemed to be observing Eva closely, especially when she wasn’t looking.",
+                "question": "Did you notice anyone paying close attention to Eva?",
+                "clue" : "The murderer is about the same height as you",
+                "hint": "Find out more about the hosts and what happened before the party"
+            }
+        }
+
+
+        let currentUser = "";
+
+    function login() {
+        const nameInput = document.getElementById("name").value.trim().toUpperCase();
+        if (characters_info[nameInput]) {
+            currentUser = nameInput;
+            document.getElementById("login").style.display = "none";
+            document.getElementById("clue").style.display = "block";
+            document.getElementById("userInformation").innerText = `Information: ${characters_info[currentUser].information}`;
+            document.getElementById("userQuestion").innerText = `Question: ${characters_info[currentUser].question}`;
+            document.getElementById("userHint").innerText = `Hint: ${characters_info[currentUser].hint}`;
+            document.getElementById("message").innerText = "";
+        } else {
+            alert("Name not recognized. Please try again.");
+        }
+    }
+
+    function getClue() {
+        const codeInput = document.getElementById("code").value.trim().toUpperCase();
+        if (codeInput === "TORA") {
+            document.getElementById("message").innerText = "Congratulations! You know who the murderer is.";
+            document.getElementById("code").style.display = "none";
+            document.getElementById("clueButton").style.display = "none";
+        } else {
+            document.getElementById("message").innerText = `Clue: ${characters_info[currentUser].clue}`;
+            document.getElementById("code").style.display = "none";
+            document.getElementById("clueButton").style.display = "none";
+        }
+    }
+    </script>
+</body>
+</html>
